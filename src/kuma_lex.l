@@ -8,12 +8,14 @@ int yywrap() {
 }
 %}
 %%
-"+"   return ADD;
-"-"   return SUB;
-"*"   return MUL;
-"/"   return DIV;
-"\n"  return CR;
-([1-9][0-9]*)|0|([0-9]+\.[0-9]+) {
+<INITIAL>"+"   return ADD;
+<INITIAL>"-"   return SUB;
+<INITIAL>"*"   return MUL;
+<INITIAL>"/"   return DIV;
+<INITIAL>"\n"  return CR;
+<INITIAL>"("   return LPAREN;
+<INITIAL>")"   return RPAREN;
+<INITIAL>([1-9][0-9]*)|0|([0-9]+\.[0-9]+) {
   /* General lexer for number */
   double temp;
   sscanf(yytext, "%lf", &temp);
@@ -22,8 +24,8 @@ int yywrap() {
   /* Set token id */
   return DOUBLE_LITERAL;
 }
-[ \t] ; /* Just ignore */
-. {
+<INITIAL>[ \t] ; /* Just ignore */
+<INITIAL>. {
   fprintf(stderr, "Lexical error!\n");
   exit(1);
 }
