@@ -4,6 +4,7 @@
 #include <getopt.h>
 
 /* YACC header will be in the upper level */
+#include "kuma_ast.h"
 #include "../y.tab.h"
 
 void print_usage() {

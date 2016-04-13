@@ -1,5 +1,6 @@
 %{
 #include <stdio.h>
+#include "kuma_ast.h"
 #include "../y.tab.h" // include auto-generated yacc header
 
 // To make llibrary liking happy
@@ -16,12 +17,9 @@ int yywrap() {
 <INITIAL>"("   return LPAREN;
 <INITIAL>")"   return RPAREN;
 <INITIAL>([1-9][0-9]*)|0|([0-9]+\.[0-9]+) {
-  /* General lexer for number */
-  double temp;
-  sscanf(yytext, "%lf", &temp);
-  /* Set data */
-  yylval.double_value = temp;
-  /* Set token id */
+  yylval.expr = malloc(sizeof(Expr));
+  yylval.expr->type = DOUBLE_LITERAL_EXPR;
+  sscanf(yytext, "%lf", &yylval.expr->value.real);
   return DOUBLE_LITERAL;
 }
 <INITIAL>[ \t] ; /* Just ignore */

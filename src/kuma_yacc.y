@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "kuma_ast.h"
+
 // To enable debug verbose output
 #define YYDEBUG 2
 
@@ -12,12 +14,11 @@ int yylex();
 #endif
 %}
 %union {
-  int int_value;
-  double double_value;
+  Expr  *expr;
 }
-%token <double_value> DOUBLE_LITERAL
+%token <expr> DOUBLE_LITERAL
 %token ADD SUB MUL DIV CR LPAREN RPAREN
-%type <double_value> expr term factor
+%type <expr> expr term factor
 %%
 line_list
   : line
@@ -25,31 +26,29 @@ line_list
   ;
 line
   : expr CR 
-  { printf("= %lf \n", $1); }
+  { printf("= %lf \n", ($1)->value.real); }
   ;
 expr
   : expr ADD term 
-  { $$ = $1 + $3; }
+  { $$ = create_binary_expr(ADD_BINARY_EXPR, $1, $3); }
   | expr SUB term 
-  { $$ = $1 - $3; }
+  { $$ = create_binary_expr(SUB_BINARY_EXPR, $1, $3); }
   | term 
   { $$ = $1; }
   ;
 term
   : term MUL factor 
-  { $$ = $1 * $3; }
+  { $$ = create_binary_expr(MUL_BINARY_EXPR, $1, $3); }
   | term DIV factor 
-  { $$ = $1 / $3; }
+  { $$ = create_binary_expr(DIV_BINARY_EXPR, $1, $3); }
   | factor
   { $$ = $1; }
   ;
 factor
   : DOUBLE_LITERAL
-  { $$ = $1; }
+  { printf("%lf\n", ($1)->value.real); }
   | LPAREN expr RPAREN
   { $$ = $2; }
-  | SUB factor
-  { $$ = -$2; }
   ;
 %%
 int yyerror(char const *str) {
