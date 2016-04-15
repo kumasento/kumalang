@@ -19,7 +19,7 @@ YACC_SOURCE=$(NAME)_yacc.c
 YACC_OUTPUT=y.output
 
 # Program sources definition
-OBJ=kuma_yacc.o kuma_lex.o kuma.o kuma_ast.o
+OBJ=kuma_yacc.o kuma_lex.o kuma.o kuma_ast.o kuma_interpreter.o
 EXEC=kuma
 OBJS=$(addprefix $(OBJDIR), $(OBJ))
 DEPS=$(wildcard $(SRCDIR)*.h) Makefile 

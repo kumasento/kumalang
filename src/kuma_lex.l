@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include "kuma_ast.h"
+#include "kuma_interpreter.h"
 #include "../y.tab.h" // include auto-generated yacc header
 
 // To make llibrary liking happy
@@ -16,6 +17,8 @@ int yywrap() {
 <INITIAL>"\n"  return CR;
 <INITIAL>"("   return LPAREN;
 <INITIAL>")"   return RPAREN;
+<INITIAL>"{"   return LCURLY;
+<INITIAL>"}"   return RCURLY;
 <INITIAL>([1-9][0-9]*)|0 {
   yylval.expression = malloc(sizeof(Expression));
   yylval.expression->type = INTEGER_CONST_EXPRESSION;
