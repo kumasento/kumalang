@@ -5,29 +5,35 @@
 
 typedef enum {
   /* constants */
-  DOUBLE_LITERAL_EXPR,
+  INTEGER_CONST_EXPRESSION = 0,
+  REAL_CONST_EXPRESSION,
   /* binary expressions */
-  ADD_BINARY_EXPR,
-  SUB_BINARY_EXPR,
-  MUL_BINARY_EXPR,
-  DIV_BINARY_EXPR
-} ExprType;
+  ADD_BINARY_EXPRESSION,
+  SUB_BINARY_EXPRESSION,
+  MUL_BINARY_EXPRESSION,
+  DIV_BINARY_EXPRESSION
+} ExpressionType;
 
-typedef struct Expr_tag Expr;
+typedef struct Expression_tag Expression;
 
 /* binary expression content */
-typedef struct { Expr *e1, *e2; } BinaryExpr;
+typedef struct { Expression *e1, *e2; } BinaryExpression;
 
-struct Expr_tag {
-  ExprType type;
+struct Expression_tag {
+  ExpressionType type;
   union {
-    double      real;
-    int         integer;
-    Expr        *expr;
-    BinaryExpr  binary;
+    double            real;
+    int               integer;
+    Expression        *expression;
+    BinaryExpression  binary_expression;
   } value;
 };
 
-Expr *create_binary_expr(ExprType type, Expr *e1, Expr *e2);
+/* create */
+Expression *create_binary_expr(ExpressionType type, Expression *e1, Expression *e2);
+
+/* utilities */
+void print_binary_expression(Expression *expression);
+void print_expression(Expression *expression);
 
 #endif

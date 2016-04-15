@@ -32,3 +32,6 @@ kuma
 *.output
 obj/
 *.o
+y.tab.h
+src/kuma_yacc.c
+

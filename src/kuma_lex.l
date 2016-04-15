@@ -16,10 +16,16 @@ int yywrap() {
 <INITIAL>"\n"  return CR;
 <INITIAL>"("   return LPAREN;
 <INITIAL>")"   return RPAREN;
-<INITIAL>([1-9][0-9]*)|0|([0-9]+\.[0-9]+) {
-  yylval.expr = malloc(sizeof(Expr));
-  yylval.expr->type = DOUBLE_LITERAL_EXPR;
-  sscanf(yytext, "%lf", &yylval.expr->value.real);
+<INITIAL>([1-9][0-9]*)|0 {
+  yylval.expression = malloc(sizeof(Expression));
+  yylval.expression->type = INTEGER_CONST_EXPRESSION;
+  sscanf(yytext, "%d", &yylval.expression->value.integer);
+  return INT_LITERAL; 
+}
+<INITIAL>([0-9]+\.[0-9]+) {
+  yylval.expression = malloc(sizeof(Expression));
+  yylval.expression->type = REAL_CONST_EXPRESSION;
+  sscanf(yytext, "%lf", &yylval.expression->value.real);
   return DOUBLE_LITERAL;
 }
 <INITIAL>[ \t] ; /* Just ignore */

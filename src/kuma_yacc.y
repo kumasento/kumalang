@@ -14,11 +14,11 @@ int yylex();
 #endif
 %}
 %union {
-  Expr  *expr;
+  Expression  *expression;
 }
-%token <expr> DOUBLE_LITERAL
+%token <expression> DOUBLE_LITERAL INT_LITERAL
 %token ADD SUB MUL DIV CR LPAREN RPAREN
-%type <expr> expr term factor
+%type <expression> expr term factor
 %%
 line_list
   : line
@@ -26,27 +26,27 @@ line_list
   ;
 line
   : expr CR 
-  { printf("= %lf \n", ($1)->value.real); }
+  { print_expression($1); }
   ;
 expr
   : expr ADD term 
-  { $$ = create_binary_expr(ADD_BINARY_EXPR, $1, $3); }
+  { $$ = create_binary_expr(ADD_BINARY_EXPRESSION, $1, $3); }
   | expr SUB term 
-  { $$ = create_binary_expr(SUB_BINARY_EXPR, $1, $3); }
+  { $$ = create_binary_expr(SUB_BINARY_EXPRESSION, $1, $3); }
   | term 
   { $$ = $1; }
   ;
 term
   : term MUL factor 
-  { $$ = create_binary_expr(MUL_BINARY_EXPR, $1, $3); }
+  { $$ = create_binary_expr(MUL_BINARY_EXPRESSION, $1, $3); }
   | term DIV factor 
-  { $$ = create_binary_expr(DIV_BINARY_EXPR, $1, $3); }
+  { $$ = create_binary_expr(DIV_BINARY_EXPRESSION, $1, $3); }
   | factor
   { $$ = $1; }
   ;
 factor
   : DOUBLE_LITERAL
-  { printf("%lf\n", ($1)->value.real); }
+  | INT_LITERAL
   | LPAREN expr RPAREN
   { $$ = $2; }
   ;
